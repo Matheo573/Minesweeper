@@ -1,10 +1,12 @@
 import java.awt.*;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 
 public class GUI{
@@ -15,17 +17,22 @@ public class GUI{
     JLabel time, counter;
     JButton[][] board;
 	boolean untouched = true;
+    final int guiX, guiY, guiBombs;
     
 
-    public GUI(Minesweeper minesweeper){
+    public GUI(int X, int Y, int bombs){
+        guiX = X;
+        guiY = Y;
+        guiBombs = bombs;
+        Minesweeper ms = Minesweeper.getInstance(guiX, guiY, guiBombs);
         frame = new JFrame("Minesweeper");
 
-        final int sizeX = minesweeper.getX();
-        final int sizeY = minesweeper.getY();
+        final int sizeX = ms.getX();
+        final int sizeY = ms.getY();
 
         info = new JPanel();
         game = new JPanel();
-        bombCounter = minesweeper.getBombsLeft();
+        bombCounter = ms.getBombsLeft();
         counter = new JLabel(Integer.toString(bombCounter));
         time = new JLabel("time");
         board = new JButton[sizeX][sizeY];
@@ -36,7 +43,7 @@ public class GUI{
         info.add(time);
 
         game.setBorder(BorderFactory.createLineBorder(Color.black));
-        game.setLayout(new GridLayout(sizeY, sizeX, 5, 5));
+        game.setLayout(new GridLayout(sizeX, sizeY, 5, 5));
 
 
         for(int i = 0; i < sizeX; i++){
@@ -71,20 +78,18 @@ public class GUI{
         int y =  Integer.parseInt(coords.get(1));
     }*/
     private void onButtonClick(int row, int column) {
-		Minesweeper ms = Minesweeper.getInstance();
+		Minesweeper ms = Minesweeper.getInstance(guiX, guiY, guiBombs);
 		
 		if(untouched){
 			ms.setBombsNaive(row, column);
 			untouched = false;
-            int x = ms.getX();
-            int y = ms.getY();
 		}
 
 		char cell = ms.getCellValue(row, column);
 
 		if(cell == ms.bomb){
 			board[row][column].setText("" + cell);
-			System.exit(0);
+			//System.exit(0);
 		}else{
 			board[row][column].setText("" + cell);
 
