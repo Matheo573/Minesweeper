@@ -74,12 +74,13 @@ public class GUI{
 		Minesweeper ms = Minesweeper.getInstance();
 		
 		if(untouched){
-			ms.setBombs(row, column);
+			ms.setBombsNaive(row, column);
 			untouched = false;
+            int x = ms.getX();
+            int y = ms.getY();
 		}
 
-		ms.toDisplay(row, column);
-		char cell = ms.getCell(row, column);
+		char cell = ms.getCellValue(row, column);
 
 		if(cell == ms.bomb){
 			board[row][column].setText("" + cell);

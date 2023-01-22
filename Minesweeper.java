@@ -10,9 +10,9 @@ public class Minesweeper {
     }
 
     final private int X, Y;
+    private int bombsInitial;
     private int bombsLeft;
-    private char[][] board;
-    private char[][] displayBoard;
+    public char[][] board;
 
     final public char bomb = '*';
 
@@ -33,26 +33,23 @@ public class Minesweeper {
     public char[][] getBoard() {
         return board;
     }
-    private void setBoard(char input, int x, int y) {
+    /*
+    private void setCell(char input, int x, int y) {
         this.board[x][y] = input;
     }
-    public char[][] getDisplayBoard() {
-        return displayBoard;
-    }
-    public char getCell(int x, int y) {
-        toDisplay(x, y);
-        return displayBoard[x][y];
+    */
+    public char getCellValue(int x, int y) {
+        return calculateDisplay(x, y);
     }
     
     public Minesweeper(int X, int Y, int bombs){
         
         this.X = (X > 3)? X : 3;
         this.Y = (Y > 3)? Y : 3;
-        bombsLeft = (bombs < this.X * this.Y)? bombs : 3;
+        bombsInitial = (bombs < this.X * this.Y)? bombs : 3;
         this.board = new char[this.X][this.Y];
-        this.displayBoard = new char[this.X][this.Y];
     }
-
+    /*
     //randomly fills the board with bombs. Taking into account the first clicked place must be empty.
     public void setBombs(int firstMoveX, int firstMoveY){
         int spacesToFill = this.X * this.Y - 9;
@@ -76,7 +73,7 @@ public class Minesweeper {
                 /* I've checked the math, and this should give an even distribution
                  * might tend to make the last few spaces either fully empty or fully bombed 
                  * TODO check if bomb generation works properly
-                 */
+                 \* /
                 if(Math.random() < 1.0 / spacesToFill || spacesToFill == bombsLeft-bombsPlaced){
                     this.board[parser / this.X][parser % this.Y] = bomb;
                     bombsPlaced++;
@@ -87,34 +84,59 @@ public class Minesweeper {
         }
 
     }
-    /*public void setBombsNaive(){
-     *
-     * }
-     */
+    */
+    public void setBombsNaive(int firstMoveX, int firstMoveY){
+        int bombsLeftToPlace = bombsInitial;
+        
+        while(bombsLeftToPlace > 0){
+            int x = (int)(Math.random() * X);
+            int y = (int)(Math.random() * Y);
 
-    public void toDisplay(int inputX, int inputY){
-        if(board[inputX][inputY] == bomb){    
-            displayBoard[inputX][inputY] = bomb;
-            
-        }else{
-            int count = 0;
-            for(int i = inputX - 1; i <= inputX + 1; i++){
-                for(int j = inputY - 1; j <= inputY + 1; j++){
-                    try{
-                        if(board[i][j] == bomb){
-                            count++;
-                        }
-                    }catch(Exception e){
+            //
+            if (board[x][y] == bomb) {continue;}
+            //no unsolvable clusters of bombs
+            if (adjacentBombs(x, y) > 7) {continue;}
 
-                    }
-                }
-    
+            //first click must be empty
+            if (x - firstMoveX <= 1 &&
+                firstMoveX - x <= 1 &&
+                y - firstMoveY <= 1 &&
+                firstMoveY - y <= 1) {
+                    continue;
             }
-            displayBoard[inputX][inputY] = (char)('0' + count);
+
+            board[x][y] = bomb;
+            bombsLeftToPlace--;
+        }
+        
+    }
+    
+
+    private char calculateDisplay(int inputX, int inputY){
+        if(board[inputX][inputY] == bomb){    
+            return bomb;
+        }else{
+            return (char)('0' + adjacentBombs(inputX, inputY));
         }
     }
 
+    private int adjacentBombs(int inputX, int inputY) {
 
-    
+        int count = (board[inputX][inputY] == bomb)? -1 : 0;
+        for(int i = inputX - 1; i <= inputX + 1; i++){
+            for(int j = inputY - 1; j <= inputY + 1; j++){
+                try{
+                    if(board[i][j] == bomb){
+                        count++;
+                    }
+                }catch(Exception e){
+                    System.out.println("border encountered");
+                }
+            }
+
+        }
+        return count;
+        
+    }
 
 }
