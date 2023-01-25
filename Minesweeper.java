@@ -94,7 +94,6 @@ public class Minesweeper {
             for(int j = -1; j < 2; j++){
                 try{
                     if(board[inputX + i][inputY + j] == bomb){
-                        System.out.print(i + " " + j + " " + count + "\n");
                         count++;
                     }
                 }catch(ArrayIndexOutOfBoundsException e){
