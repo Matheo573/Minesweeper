@@ -1,13 +1,13 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.BorderLayout;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import java.util.Date;
 
@@ -73,13 +73,9 @@ public class GUI{
         frame.setSize(this.windowSizeX, this.windowSizeY);
         frame.pack();
         frame.setVisible(true);
+    }
 
-    }/* 
-    private void clickButton(String text){
-        List<String> coords = Arrays.asList(text.split(" "));
-        int x = Integer.parseInt(coords.get(0));
-        int y =  Integer.parseInt(coords.get(1));
-    }*/
+
     private void onButtonClick(int row, int column) {
 		Minesweeper ms = Minesweeper.getInstance(guiX, guiY, guiBombs);
 		
@@ -92,6 +88,7 @@ public class GUI{
 
 		if(cell == ms.bomb){
 			board[row][column].setText("" + cell);
+            board[row][column].setBackground(Color.red);
 			//System.exit(0);
 		}else{
 			board[row][column].setText("" + cell);
