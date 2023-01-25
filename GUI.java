@@ -85,6 +85,7 @@ public class GUI{
 		}
 
 		char cell = ms.getCellValue(row, column);
+        ms.uncovered[row][column] = true;
 
 		if(cell == ms.bomb){
 			board[row][column].setText("" + cell);
@@ -97,9 +98,9 @@ public class GUI{
         if (cell == '0') {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
-                    if (i != 0 || j != 0) {
+                    if ((i != 0 || j != 0) && !ms.uncovered[row + i][column + j]) {
                         try {
-                            board[row + i][column + j].setText("" + ms.getCellValue(row + i, column + j));
+                            onButtonClick(row + i, column + j);
                             
                         }catch(ArrayIndexOutOfBoundsException e) {
                             continue;

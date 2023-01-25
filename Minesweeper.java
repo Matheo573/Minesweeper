@@ -13,7 +13,8 @@ public class Minesweeper {
     final private int X, Y;
     private int bombsInitial;
     private int bombsLeft;
-    public char[][] board;
+    private char[][] board;
+    public boolean[][] uncovered;
 
     final public char bomb = '*';
 
@@ -49,6 +50,7 @@ public class Minesweeper {
         this.Y = Y;
         this.bombsInitial = (bombs < this.X * this.Y)? bombs : 3;
         this.board = new char[this.X][this.Y];
+        this.uncovered = new boolean[this.X][this.Y];
     }
 
 
